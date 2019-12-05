@@ -16,8 +16,8 @@ namespace NumberGenerator.Logic
         /// <summary>
         /// Enthält das Minimum der generierten Zahlen.
         /// </summary>
-        public int Min { get; private set; }
-
+        public int Min { get; private set; } 
+        
         /// <summary>
         /// Enthält das Maximum der generierten Zahlen.
         /// </summary>
@@ -39,7 +39,8 @@ namespace NumberGenerator.Logic
 
         public StatisticsObserver(IObservable numberGenerator, int countOfNumbersToWaitFor) : base(numberGenerator, countOfNumbersToWaitFor)
         {
-
+            Min = int.MaxValue;
+            Max = int.MinValue;
         }
 
         #endregion
@@ -53,7 +54,12 @@ namespace NumberGenerator.Logic
 
         public override void OnNextNumber(int number)
         {
-            throw new NotImplementedException();
+
+            if(CountOfNumbersToWaitFor == CountOfNumbersReceived)
+            {
+                DetachFromNumberGenerator();
+            }
+            base.OnNextNumber(number:);
         }
 
         #endregion
