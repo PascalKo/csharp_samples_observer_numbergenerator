@@ -31,13 +31,17 @@ namespace NumberGenerator.Logic
         /// </summary>
         public int NumbersOfHitsToWaitFor { get; private set; }
 
+        
+
         #endregion
 
         #region Constructors
 
         public RangeObserver(IObservable numberGenerator, int numberOfHitsToWaitFor, int lowerRange, int upperRange) : base(numberGenerator, int.MaxValue)
         {
-            throw new NotImplementedException();
+            NumbersOfHitsToWaitFor = numberOfHitsToWaitFor;
+            LowerRange = lowerRange;
+            UpperRange = upperRange;
         }
 
         #endregion
@@ -51,7 +55,31 @@ namespace NumberGenerator.Logic
 
         public override void OnNextNumber(int number)
         {
-            throw new NotImplementedException();
+            base.OnNextNumber(number);
+
+            if(number < LowerRange || number >UpperRange)
+            {
+                throw new ArgumentException("Number not in Range!");
+            }
+            else if(LowerRange>=UpperRange)
+            {
+                throw new ArgumentException("Lower range bigger than upper range!");
+            }
+            else if(NumbersInRange < NumbersOfHitsToWaitFor && (number >= LowerRange && number<= UpperRange))
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"   >> {this.GetType().Name}: Number  is in range('{LowerRange} - {UpperRange}')");
+                Console.ResetColor();
+                NumbersInRange++;
+            }
+            else
+            {
+                
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"   >> {this.GetType().Name}: Got '{NumbersOfHitsToWaitFor}' numbers in the configured range => I am not interested in new numbers anymore => Detach().");
+                Console.ResetColor();
+                DetachFromNumberGenerator();
+            }
         }
 
         #endregion

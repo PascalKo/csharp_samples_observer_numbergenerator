@@ -26,7 +26,8 @@ namespace NumberGenerator.Logic
 
         public BaseObserver(IObservable numberGenerator, int countOfNumbersToWaitFor)
         {
-            throw new NotImplementedException();
+            _numberGenerator = numberGenerator;
+            CountOfNumbersToWaitFor = countOfNumbersToWaitFor;
         }
 
         #endregion
@@ -63,7 +64,7 @@ namespace NumberGenerator.Logic
 
         protected void DetachFromNumberGenerator()
         {
-            throw new NotImplementedException();
+            _numberGenerator.Detach(this);
         }
 
         #endregion

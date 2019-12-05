@@ -26,7 +26,7 @@ namespace NumberGenerator.Logic
 
         public QuickTippObserver(IObservable numberGenerator)
         {
-            throw new NotImplementedException();
+            _numberGenerator=numberGenerator;
         }
 
         #endregion
@@ -45,7 +45,7 @@ namespace NumberGenerator.Logic
 
         private void DetachFromNumberGenerator()
         {
-            throw new NotImplementedException();
+            _numberGenerator.Detach(this);
         }
 
         #endregion
