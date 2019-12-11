@@ -111,9 +111,9 @@ namespace NumberGenerator.Logic
                 throw new ArgumentNullException();
             }
 
-            foreach (IObserver observer in _observers)
+            for(int i=0;i<_observers.Count;i++)
             {
-                observer.OnNextNumber(number);
+                _observers[i].OnNextNumber(number);
             }
 
 
