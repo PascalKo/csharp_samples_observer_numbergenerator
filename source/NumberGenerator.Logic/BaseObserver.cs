@@ -26,8 +26,17 @@ namespace NumberGenerator.Logic
 
         public BaseObserver(IObservable numberGenerator, int countOfNumbersToWaitFor)
         {
+            if(numberGenerator==null)
+            {
+                throw new ArgumentNullException();
+            }
+            if(countOfNumbersToWaitFor < 0)
+            {
+                throw new ArgumentException();
+            }
             _numberGenerator = numberGenerator;
             CountOfNumbersToWaitFor = countOfNumbersToWaitFor;
+            _numberGenerator.Attach(this);
         }
 
         #endregion

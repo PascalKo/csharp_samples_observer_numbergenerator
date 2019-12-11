@@ -54,12 +54,22 @@ namespace NumberGenerator.Logic
 
         public override void OnNextNumber(int number)
         {
+            if(number > Max)
+            {
+                Max = number;
+            }
+            else if(number < Min)
+            {
+                Min = number;
+            }
+            Sum += number;
+
 
             if(CountOfNumbersToWaitFor == CountOfNumbersReceived)
             {
                 DetachFromNumberGenerator();
             }
-            base.OnNextNumber(number:);
+            base.OnNextNumber(number);
         }
 
         #endregion
