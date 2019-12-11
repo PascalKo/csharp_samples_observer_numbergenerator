@@ -49,7 +49,7 @@ namespace NumberGenerator.Logic
 
         public override string ToString()
         {
-            throw new NotImplementedException();
+            return base.ToString() + $" => StatisticsObserver [Min='{Min}', Max='{Max}', Sum='{Sum}', Avg='{Avg}']";
         }
 
         public override void OnNextNumber(int number)

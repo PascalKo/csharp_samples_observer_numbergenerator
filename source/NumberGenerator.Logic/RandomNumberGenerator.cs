@@ -106,12 +106,17 @@ namespace NumberGenerator.Logic
         /// <param name="number">Die generierte Zahl.</param>
         public void NotifyObservers(int number)
         {
+            if (_observers == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             foreach (IObserver observer in _observers)
             {
                 observer.OnNextNumber(number);
             }
 
-            
+
         }
 
         #endregion
@@ -128,14 +133,14 @@ namespace NumberGenerator.Logic
         public void StartNumberGeneration()
         {
 
-            do
+            while (_observers != null)
             {
-                int number = _random.Next(RANDOM_MIN_VALUE, RANDOM_MIN_VALUE);
+                int number = _random.Next(RANDOM_MIN_VALUE, RANDOM_MAX_VALUE);
                 NotifyObservers(number);
                 Task.Delay(_delay).Wait();
                 Console.WriteLine($">> {this.GetType().Name}: Number generated '{number}");
-
-            } while (_observers!=null);
+            }
+          
         }
 
         #endregion

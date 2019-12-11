@@ -15,7 +15,7 @@ namespace NumberGenerator.Logic
         /// Enthält die untere Schranke (inkl.)
         /// </summary>
         public int LowerRange { get; private set; }
-        
+
         /// <summary>
         /// Enthält die obere Schranke (inkl.)
         /// </summary>
@@ -31,7 +31,7 @@ namespace NumberGenerator.Logic
         /// </summary>
         public int NumbersOfHitsToWaitFor { get; private set; }
 
-        
+
 
         #endregion
 
@@ -39,9 +39,18 @@ namespace NumberGenerator.Logic
 
         public RangeObserver(IObservable numberGenerator, int numberOfHitsToWaitFor, int lowerRange, int upperRange) : base(numberGenerator, int.MaxValue)
         {
+            if (numberOfHitsToWaitFor < 0)
+            {
+                throw new ArgumentException();
+            }
+            if (lowerRange > upperRange)
+            {
+                throw new ArgumentException();
+            }
             NumbersOfHitsToWaitFor = numberOfHitsToWaitFor;
             LowerRange = lowerRange;
             UpperRange = upperRange;
+
         }
 
         #endregion
@@ -57,28 +66,27 @@ namespace NumberGenerator.Logic
         {
             base.OnNextNumber(number);
 
-            if(number < LowerRange || number >UpperRange)
-            {
-                throw new ArgumentException("Number not in Range!");
-            }
-            else if(LowerRange>=UpperRange)
+
+
+            if (LowerRange >= UpperRange)
             {
                 throw new ArgumentException("Lower range bigger than upper range!");
             }
-            else if(NumbersInRange < NumbersOfHitsToWaitFor && (number >= LowerRange && number<= UpperRange))
+            else if (NumbersInRange < NumbersOfHitsToWaitFor && (number >= LowerRange && number <= UpperRange))
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"   >> {this.GetType().Name}: Number  is in range('{LowerRange} - {UpperRange}')");
                 Console.ResetColor();
                 NumbersInRange++;
             }
-            else
+            else if(NumbersInRange == NumbersOfHitsToWaitFor)
             {
-                
+
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"   >> {this.GetType().Name}: Got '{NumbersOfHitsToWaitFor}' numbers in the configured range => I am not interested in new numbers anymore => Detach().");
                 Console.ResetColor();
                 DetachFromNumberGenerator();
+
             }
         }
 
