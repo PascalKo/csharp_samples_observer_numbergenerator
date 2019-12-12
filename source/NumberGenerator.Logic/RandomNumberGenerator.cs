@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static NumberGenerator.Logic.IObservable;
 
 namespace NumberGenerator.Logic
 {
@@ -24,9 +25,10 @@ namespace NumberGenerator.Logic
         #endregion
 
         #region Fields
-        IList<IObserver> _observers = new List<IObserver>();
-        private Random _random;
-        private int _delay;
+        private readonly Random _random;
+        private readonly int _delay;
+
+        public NextNumberHandler NumberHandler { get; set; }
 
         #endregion
 
@@ -68,37 +70,37 @@ namespace NumberGenerator.Logic
         /// Fügt einen Beobachter hinzu.
         /// </summary>
         /// <param name="observer">Der Beobachter, welcher benachricht werden möchte.</param>
-        public void Attach(IObserver observer)
-        {
-            if (observer == null)
-            {
-                throw new ArgumentNullException();
-            }
-            if (_observers.Contains(observer))
-            {
-                throw new InvalidOperationException("Observer already exists!");
-            }
-            _observers.Add(observer);
-        }
+        //public void Attach(IObserver observer)
+        //{
+        //    if (observer == null)
+        //    {
+        //        throw new ArgumentNullException();
+        //    }
+        //    if (_observers.Contains(observer))
+        //    {
+        //        throw new InvalidOperationException("Observer already exists!");
+        //    }
+        //    _observers.Add(observer);
+        //}
 
         /// <summary>
         /// Entfernt einen Beobachter.
         /// </summary>
         /// <param name="observer">Der Beobachter, welcher nicht mehr benachrichtigt werden möchte</param>
-        public void Detach(IObserver observer)
-        {
+        //public void Detach(IObserver observer)
+        //{
 
-            if (observer == null)
-            {
-                throw new ArgumentNullException();
-            }
-            if (!_observers.Contains(observer))
-            {
-                throw new InvalidOperationException("observer does not exist");
-            }
-            _observers.Remove(observer);
+        //    if (observer == null)
+        //    {
+        //        throw new ArgumentNullException();
+        //    }
+        //    if (!_observers.Contains(observer))
+        //    {
+        //        throw new InvalidOperationException("observer does not exist");
+        //    }
+        //    _observers.Remove(observer);
 
-        }
+        //}
 
         /// <summary>
         /// Benachrichtigt die registrierten Beobachter, dass eine neue Zahl generiert wurde.
@@ -106,24 +108,14 @@ namespace NumberGenerator.Logic
         /// <param name="number">Die generierte Zahl.</param>
         public void NotifyObservers(int number)
         {
-            if (_observers == null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            for(int i=0;i<_observers.Count;i++)
-            {
-                _observers[i].OnNextNumber(number);
-            }
-
-
+            NumberHandler.Invoke(number);   
         }
 
         #endregion
 
         public override string ToString()
         {
-            throw new NotImplementedException();
+            return $"{nameof(NumberGenerator)}";
         }
 
         /// <summary>
@@ -133,14 +125,14 @@ namespace NumberGenerator.Logic
         public void StartNumberGeneration()
         {
 
-            while (_observers != null)
+            while (NumberHandler!=null)
             {
                 int number = _random.Next(RANDOM_MIN_VALUE, RANDOM_MAX_VALUE);
                 NotifyObservers(number);
                 Task.Delay(_delay).Wait();
                 Console.WriteLine($">> {this.GetType().Name}: Number generated '{number}");
             }
-          
+
         }
 
         #endregion

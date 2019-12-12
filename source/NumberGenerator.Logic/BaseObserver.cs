@@ -26,17 +26,11 @@ namespace NumberGenerator.Logic
 
         public BaseObserver(IObservable numberGenerator, int countOfNumbersToWaitFor)
         {
-            if(numberGenerator==null)
-            {
-                throw new ArgumentNullException();
-            }
-            if(countOfNumbersToWaitFor < 0)
-            {
-                throw new ArgumentException();
-            }
-            _numberGenerator = numberGenerator;
+            
+            _numberGenerator = numberGenerator ?? throw new ArgumentNullException("Number Generator is Null!!!");
             CountOfNumbersToWaitFor = countOfNumbersToWaitFor;
-            _numberGenerator.Attach(this);
+            _numberGenerator.NumberHandler += this.OnNextNumber;
+            CountOfNumbersReceived = 0;
         }
 
         #endregion
@@ -51,7 +45,7 @@ namespace NumberGenerator.Logic
         /// <param name="number"></param>
         public virtual void OnNextNumber(int number)
         {
-            CountOfNumbersReceived++;
+
 
             // Sobald die Anzahl der max. Beobachtungen (_countOfNumbersToWaitFor) erreicht ist -> Detach()
             if (CountOfNumbersReceived >= CountOfNumbersToWaitFor)
@@ -61,7 +55,10 @@ namespace NumberGenerator.Logic
                 Console.ResetColor();
                 DetachFromNumberGenerator();
             }
-
+            else
+            {
+                CountOfNumbersReceived++;
+            }
         }
 
         #endregion
@@ -73,7 +70,7 @@ namespace NumberGenerator.Logic
 
         protected void DetachFromNumberGenerator()
         {
-            _numberGenerator.Detach(this);
+            _numberGenerator.NumberHandler -= this.OnNextNumber;
         }
 
         #endregion

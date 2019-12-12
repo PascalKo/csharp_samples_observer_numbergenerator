@@ -11,7 +11,7 @@ namespace NumberGenerator.Logic
     {
         #region Fields
 
-        private IObservable _numberGenerator;
+        private readonly IObservable _numberGenerator;
 
         #endregion
 
@@ -45,7 +45,7 @@ namespace NumberGenerator.Logic
 
         private void DetachFromNumberGenerator()
         {
-            _numberGenerator.Detach(this);
+            _numberGenerator.NumberHandler -= this.OnNextNumber;
         }
 
         #endregion
