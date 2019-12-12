@@ -50,7 +50,7 @@ namespace NumberGenerator.Logic
             NumbersOfHitsToWaitFor = numberOfHitsToWaitFor;
             LowerRange = lowerRange;
             UpperRange = upperRange;
-            
+
         }
 
         #endregion
@@ -64,10 +64,15 @@ namespace NumberGenerator.Logic
 
         public override void OnNextNumber(int number)
         {
-            
 
 
 
+
+            if (NumbersInRange < NumbersOfHitsToWaitFor)
+            {
+
+                base.OnNextNumber(number);
+            }
             if (LowerRange >= UpperRange)
             {
                 throw new ArgumentException("Lower range bigger than upper range!");
@@ -79,16 +84,15 @@ namespace NumberGenerator.Logic
                 Console.ResetColor();
                 NumbersInRange++;
             }
-            else if(NumbersInRange == NumbersOfHitsToWaitFor)
+            else if (NumbersInRange == NumbersOfHitsToWaitFor)
             {
 
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"   >> {this.GetType().Name}: Got '{NumbersOfHitsToWaitFor}' numbers in the configured range => I am not interested in new numbers anymore => Detach().");
                 Console.ResetColor();
                 DetachFromNumberGenerator();
-                
+
             }
-            base.OnNextNumber(number);
         }
 
         #endregion

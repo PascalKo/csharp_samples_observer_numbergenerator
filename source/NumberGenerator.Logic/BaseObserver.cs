@@ -54,6 +54,7 @@ namespace NumberGenerator.Logic
                 Console.WriteLine($"   >> {this.GetType().Name}: Received '{CountOfNumbersReceived}' of '{CountOfNumbersToWaitFor}' => I am not interested in new numbers anymore => Detach().");
                 Console.ResetColor();
                 DetachFromNumberGenerator();
+                
             }
             else
             {
